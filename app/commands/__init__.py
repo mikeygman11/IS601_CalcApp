@@ -8,7 +8,6 @@ class Command(ABC):
 class CommandHandler:
     def __init__(self):
         self.commands = {}
-        print("CommandHandler initialized, id:", id(self))
     
     def register_command(self, command_name: str, command_class):
         self.commands[command_name] = command_class
@@ -19,11 +18,13 @@ class CommandHandler:
             try:
                 x = float(input("Enter first number: "))
                 y = float(input("Enter second number: "))
-                # Instantiate the command class with arguments
+                # Instantiate the command with the provided arguments.
                 command = self.commands[command_name](x, y)
                 print(f"Result: {command.execute()}")
             except ValueError:
                 print("Invalid input! Please enter numeric values.")
         else:
             print(f"Unknown command: {command_name}")
-            print("Available commands:", list(self.commands.keys()))
+            # Exit if the command is unknown.
+            import sys
+            sys.exit(1)

@@ -2,7 +2,7 @@ import importlib
 import os
 import pkgutil
 from app.commands import Command, CommandHandler  # Import Command and CommandHandler at the top
-
+import sys
 class App:
     def __init__(self):
         self.command_handler = CommandHandler()
@@ -23,9 +23,11 @@ class App:
     
     def start(self):
         self.load_plugins()
+        print("Registered commands:", list(self.command_handler.commands.keys()))
         print("Type 'exit' to exit.")
         while True:
             command_name = input(">>> ").strip()
             if command_name.lower() == 'exit':
-                break
-            self.command_handler.execute_command(command_name)
+                sys.exit(0)  # This calls sys.exit(0)
+            else:
+                self.command_handler.execute_command(command_name)
