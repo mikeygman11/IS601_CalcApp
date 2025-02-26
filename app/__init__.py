@@ -3,7 +3,7 @@ from app.commands.add import AddCommand
 from app.commands.subtract import SubtractCommand
 from app.commands.multiply import MultiplyCommand
 from app.commands.divide import DivideCommand
-
+import sys
 class App:
     def __init__(self):  # Constructor
         self.command_handler = CommandHandler()
@@ -19,5 +19,5 @@ class App:
         while True:  # REPL (Read, Evaluate, Print, Loop)
             command_name = input(">>> ").strip()
             if command_name.lower() == "exit":
-                break
+                sys.exit(0)
             self.command_handler.execute_command(command_name)
