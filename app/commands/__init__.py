@@ -12,15 +12,15 @@ class CommandHandler:
     def register_command(self, command_name: str, command: Command):
         self.commands[command_name] = command
 
-    def execute_command(self, command_name: str):
-        """ Look before you leap (LBYL) - Use when its less likely to work
+    def execute_command(self, command_name):
+        """Retrieve command class, get arguments, and execute."""
         if command_name in self.commands:
-            self.commands[command_name].execute()
+            try:
+                x = float(input("Enter first number: "))
+                y = float(input("Enter second number: "))
+                command = self.commands[command_name](x, y)  # Instantiate command
+                print(f"Result: {command.execute()}")
+            except ValueError:
+                print("Invalid input! Please enter numeric values.")
         else:
-            print(f"No such command: {command_name}")
-        """
-        """Easier to ask for forgiveness than permission (EAFP) - Use when its going to most likely work"""
-        try:
-            self.commands[command_name].execute()
-        except KeyError:
-            print(f"No such command: {command_name}")
+            print(f"Unknown command: {command_name}")

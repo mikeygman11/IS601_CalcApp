@@ -4,6 +4,7 @@ from app.commands.add import AddCommand
 from app.commands.subract import SubtractCommand
 from app.commands.divide import DivideCommand
 from app.commands.multiply import MultiplyCommand
+from calculator.calculation import Calculation
 
 def test_add_command(capfd):
     command = AddCommand()
@@ -28,3 +29,4 @@ def test_multiply_command(capfd):
     command.execute()
     out, err = capfd.readouterr()
     assert out == "Hello, World!\n", "The Multiply Command should print 'Mult!'"
+
