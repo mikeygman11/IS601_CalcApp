@@ -1,7 +1,8 @@
 from app.commands import CommandHandler
-from app.commands.exit import ExitCommand
-from app.commands.goodbye import GoodbyeCommand
-from app.commands.greet import GreetCommand
+from app.commands.add import AddCommand
+from app.commands.subract import SubtractCommand
+from app.commands.multiply import MultiplyCommand
+from app.commands.divide import DivideCommand
 
 #need to add in a couple other random functions later
 class App:
@@ -11,9 +12,11 @@ class App:
 
     def start(self):
         # Register commands here
-        self.command_handler.register_command("greet", GreetCommand())
-        self.command_handler.register_command("goodbye", GoodbyeCommand())
-        self.command_handler.register_command("exit", ExitCommand())
+        self.command_handler.register_command("Add", AddCommand())
+        self.command_handler.register_command("Subtract", SubtractCommand())
+        self.command_handler.register_command("Divide", DivideCommand())
+
+        self.command_handler.register_command("Multiply", MultiplyCommand())
 
 
         print("Type 'exit' to exit.")
