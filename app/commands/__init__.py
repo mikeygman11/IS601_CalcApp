@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class Command(ABC):
     @abstractmethod
     def execute(self):
-        pass
+        pass #pragma: no cover
 
 class CommandHandler:
     def __init__(self):
