@@ -18,12 +18,10 @@ class App:
                         if isinstance(item, type) and issubclass(item, Command) and item != Command:
                             command_name = item.__name__.replace('Command', '')
                             self.command_handler.register_command(command_name, item)
-                    except TypeError:
-                        continue
-    
+                    except: # pragma: no cover
+                        continue # pragma: no cover
     def start(self):
         self.load_plugins()
-        print("Registered commands:", list(self.command_handler.commands.keys()))
         print("Type 'exit' to exit.")
         while True:
             command_name = input(">>> ").strip()

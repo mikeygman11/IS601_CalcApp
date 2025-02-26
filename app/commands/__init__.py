@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class Command(ABC):
     @abstractmethod
     def execute(self):
-        pass
+        pass  # pragma: no cover
 
 class CommandHandler:
     def __init__(self):
@@ -11,7 +11,6 @@ class CommandHandler:
     
     def register_command(self, command_name: str, command_class):
         self.commands[command_name] = command_class
-        print(f"Command '{command_name}' registered. Current mapping: {list(self.commands.keys())}")
     
     def execute_command(self, command_name: str):
         if command_name in self.commands:
