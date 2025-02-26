@@ -1,31 +1,31 @@
-from app.commands import CommandHandler
-import pkgutil
 import importlib
-from app.commands import Command
+import os
+import pkgutil
+from app.commands import Command, CommandHandler  # Import Command and CommandHandler at the top
 
-import sys
 class App:
-    def __init__(self):  # Constructor
+    def __init__(self):
         self.command_handler = CommandHandler()
 
     def load_plugins(self):
-        # Dynamically load all plugins in the plugins directory
         plugins_package = 'app.plugins'
         for _, plugin_name, is_pkg in pkgutil.iter_modules([plugins_package.replace('.', '/')]):
-            if is_pkg:  # Ensure it's a package
+            if is_pkg:
                 plugin_module = importlib.import_module(f'{plugins_package}.{plugin_name}')
                 for item_name in dir(plugin_module):
                     item = getattr(plugin_module, item_name)
                     try:
-                        if issubclass(item, (Command)):  # Assuming a BaseCommand class exists
-                            self.command_handler.register_command(plugin_name, item())
+                        if isinstance(item, type) and issubclass(item, Command) and item != Command:
+                            command_name = item.__name__.replace('Command', '')
+                            self.command_handler.register_command(command_name, item)
                     except TypeError:
-                        continue  # If item is not a class or unrelated class, just ignore
+                        continue
+    
     def start(self):
         self.load_plugins()
         print("Type 'exit' to exit.")
-        while True:  # REPL (Read, Evaluate, Print, Loop)
+        while True:
             command_name = input(">>> ").strip()
-            if command_name.lower() == "exit":
-                sys.exit(0)
+            if command_name.lower() == 'exit':
+                break
             self.command_handler.execute_command(command_name)
