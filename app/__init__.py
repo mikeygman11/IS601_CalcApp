@@ -13,6 +13,8 @@ class App:
         self.configure_logging()
         load_dotenv()
         self.settings = self.load_environment_variables()
+        for key, value in os.environ.items():
+            self.settings[key] = value
         self.settings.setdefault('ENVIRONMENT', 'PRODUCTION') #default env variables
         self.command_handler = CommandHandler()
 
@@ -34,18 +36,26 @@ class App:
     
     def load_plugins(self):
         plugins_package = 'app.plugins'
+        plugins_path = plugins_package.replace('.', '/')
+        if not os.path.exists(plugins_path):
+            logging.warning(f"Plugins directory '{plugins_path}' not found.")
+            return
         for _, plugin_name, is_pkg in pkgutil.iter_modules([plugins_package.replace('.', '/')]):
             if is_pkg:
-                plugin_module = importlib.import_module(f'{plugins_package}.{plugin_name}')
-                for item_name in dir(plugin_module):
-                    item = getattr(plugin_module, item_name)
-                    try:
-                        if isinstance(item, type) and issubclass(item, Command) and item != Command:
-                            command_name = item.__name__.replace('Command', '')
-                            self.command_handler.register_command(command_name, item)
-                    except: # pragma: no cover
-                        continue # pragma: no cover
-                    
+                try:
+                    plugin_module = importlib.import_module(f'{plugins_package}.{plugin_name}')
+                    for item_name in dir(plugin_module):
+                        item = getattr(plugin_module, item_name)
+                        try:
+                            if isinstance(item, type) and issubclass(item, Command) and item != Command:
+                                command_name = item.__name__.replace('Command', '')
+                                self.command_handler.register_command(command_name, item)
+                        except: # pragma: no cover
+
+                            continue # pragma: no cover
+                except ImportError as e:
+                    logging.error(f"Error importing plugin {plugin_name}: {e}")    
+
     def register_plugin_commands(self, plugin_module, plugin_name):
         for item_name in dir(plugin_module):
             item = getattr(plugin_module, item_name)
