@@ -1,4 +1,4 @@
 Michael Galanaugh
-HW 5
+HW 6
 
-Command branch - working to allow user input in the program
+Logging and Environment Variables project
